@@ -39,7 +39,12 @@ export default {
 
   watch: {
     selectedLocationKey (value) {
-      this.markLocation(value)
+      const location = this.locations.filter(l => l.key === value)[0]
+
+      this.removeArrow()
+      if (location) {
+        this.markLocation(location.lat, location.lng)
+      }
     }
   },
 
@@ -60,25 +65,13 @@ export default {
     handleInputChange (e) {
       this.latlng = e.target.value
       const [lat, lng] = e.target.value.split(',')
+
+      this.removeArrow()
       this.markLocation(new Number(lat), new Number(lng))
     },
-    markLocation (key) {
-      this.removeArrow()
-      let loc = null
-
-      if (arguments.length === 1) {
-        const location = this.locations.filter(l => l.key === arguments[0])[0]
-        if (location) {
-          loc = { lat: location.lat, lng: location.lng }
-        }
-      } else if (arguments.length === 2) {
-        loc = { lat: arguments[0], lng: arguments[1] }
-      }
-
-      if (loc) {
-        const { x, y, z } = coordinateToPosition(loc.lat, loc.lng, RADIUS)
-        this.createArrow(new Vector3(x, y, z))
-      }
+    markLocation (lat, lng) {
+      const { x, y, z } = coordinateToPosition(lat, lng, RADIUS)
+      this.createArrow(new Vector3(x, y, z))
     },
     removeArrow () {
       const { scene } = this.container3d
@@ -90,7 +83,8 @@ export default {
     createArrow (position) {
       const { scene, earthGroup } = this.container3d
       const v = position.clone().sub(earthGroup.position)
-      const direction = v.clone().negate().normalize()
+
+      const direction = v.clone().negate().normalize() // points from target position to the center of the earth
       const origin = v.clone().multiplyScalar((RADIUS + ARROW_HELPER_LENGTH) / RADIUS)
 
       const arrowHelper = new ArrowHelper(direction, origin)
