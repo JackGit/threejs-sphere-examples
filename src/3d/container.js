@@ -1,9 +1,11 @@
 import * as THREE from 'three'
-import { createAmbientLight, createSpotLight, createEarth, createNightEarth, createCloud } from '@/3d/creation'
+import { createAmbientLight, createSpotLight, createEarth, createCloud, createNightEarth } from '@/3d/creation'
 import { PAGE_WIDTH as WIDTH, PAGE_HEIGHT as HEIGHT } from '@/constants/page'
+import { run as runAnimate } from './animate'
 const OrbitControls = require('three-orbit-controls')(THREE)
 
-export default class Earth {
+
+export default class ExampleContainer {
   constructor (el) {
     this.container = typeof el === 'string' ? document.getElementById(el) : el
 
@@ -16,10 +18,6 @@ export default class Earth {
     this.scene = null
     this.earthGroup = null
     this.earth = null
-    this.nightEarth = null
-
-    this.cloud = null
-    this.cloudSpeed = -0.0003
 
     this.init()
   }
@@ -30,10 +28,10 @@ export default class Earth {
     this.createCamera()
     this.createLight()
     this.createEarth()
-    this.createNightEarth()
-    this.createCloud()
     this.createController()
     this.loop()
+
+    runAnimate()
   }
 
   createRenderer () {
@@ -80,19 +78,6 @@ export default class Earth {
     this.earthGroup.add(earth)
   }
 
-  createNightEarth () {
-    const nightEarth = createNightEarth()
-    nightEarth.name = 'nightEarth'
-    this.nightEarth = nightEarth
-    this.earthGroup.add(nightEarth)
-  }
-
-  createCloud () {
-    const cloud = createCloud()
-    this.earthGroup.add(cloud)
-    this.cloud = cloud
-  }
-
   createController () {
     const controller = new OrbitControls(this.camera, this.renderer.domElement)
     controller.rotateSpeed = 0.2
@@ -113,7 +98,6 @@ export default class Earth {
   }
 
   animate () {
-    this.cloud.rotation.y += this.cloudSpeed
     this.orbitController.update()
   }
 

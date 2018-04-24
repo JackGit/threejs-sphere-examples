@@ -36,19 +36,17 @@ export function createEarth () {
 }
 
 export function createNightEarth () {
-  const material = new MeshPhongMaterial({
-    map: getTexture(TEXTURE.earthNight),
-    bumpMap: getTexture(TEXTURE.earthBump),
-    bumpScale: 0.15,
-    specularMap: getTexture(TEXTURE.earthSpec),
-    specular: 0x909090,
-    shininess: 4,
-    transparent: true
-  })
-  material.opacity = 0
   return new Mesh(
     new SphereGeometry(5, 32, 32),
-    material
+    new MeshPhongMaterial({
+      map: getTexture(TEXTURE.earthNight),
+      bumpMap: getTexture(TEXTURE.earthBump),
+      bumpScale: 0.15,
+      specularMap: getTexture(TEXTURE.earthSpec),
+      specular: 0x909090,
+      shininess: 4,
+      transparent: true
+    })
   )
 }
 

@@ -17,11 +17,11 @@
 
 <script>
 import { ArrowHelper, Vector3 } from 'three'
-import Page from '@/components/Page'
-import Container3D from '@/3d/container'
-import Animate from '@/3d/animate'
 import { coordinateToPosition } from '@/3d/utils'
 import { RADIUS, ARROW_HELPER_LENGTH, LOCATIONS } from '@/constants/earth'
+import { tweenPosition } from '@/3d/tween'
+import Page from '@/components/Page'
+import Container3D from '@/3d/container'
 
 export default {
   container3d: null,
@@ -57,8 +57,7 @@ export default {
   },
 
   mounted () {
-    this.container3d = new Container3D(this.$refs.mountNode)
-    this.animate = new Animate(this.container3d)
+    this.$options.container3d = new Container3D(this.$refs.mountNode)
   },
 
   methods: {
@@ -75,18 +74,24 @@ export default {
     markLocation (lat, lng) {
       const { x, y, z } = coordinateToPosition(lat, lng, RADIUS)
       this.createArrow(new Vector3(x, y, z))
-
-      this.animate.moveCameraToTheTopOfLocation({ x, y, z })
+      this.moveCamera({ x, y, z })
+    },
+    moveCamera ({ x, y, z }) {
+      const { container3d } = this.$options
+      const { camera } = container3d
+      const cameraHeight = camera.position.length()
+      const targetPosition = new Vector3(x, y, z).multiplyScalar(cameraHeight / RADIUS)
+      tweenPosition(camera, camera.position, targetPosition).start()
     },
     removeArrow () {
-      const { scene } = this.container3d
+      const { scene } = this.$options.container3d
       const arrow = scene.getObjectByName('arrow')
       if (arrow) {
         scene.remove(arrow)
       }
     },
     createArrow (position) {
-      const { scene, earthGroup } = this.container3d
+      const { scene, earthGroup } = this.$options.container3d
       const v = position.clone().sub(earthGroup.position)
 
       const direction = v.clone().negate().normalize() // points from target position to the center of the earth
