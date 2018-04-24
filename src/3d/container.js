@@ -19,6 +19,8 @@ export default class ExampleContainer {
     this.earthGroup = null
     this.earth = null
 
+    this.updateFunc = null
+
     this.init()
   }
 
@@ -99,9 +101,14 @@ export default class ExampleContainer {
 
   animate () {
     this.orbitController.update()
+    this.updateFunc && this.updateFunc()
   }
 
   render () {
     this.renderer.render(this.scene, this.camera)
+  }
+
+  onUpdate (func) {
+    this.updateFunc = func
   }
 }

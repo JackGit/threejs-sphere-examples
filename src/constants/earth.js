@@ -1,4 +1,6 @@
 export const RADIUS = 5
+export const MOON_RADIUS = 0.6
+export const MOON_DISTANCE = 10
 export const ARROW_HELPER_LENGTH = 1
 
 export const LOCATIONS = [

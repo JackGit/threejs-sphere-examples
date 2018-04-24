@@ -2,6 +2,7 @@ import {
   Mesh, SphereGeometry, MeshPhongMaterial, AdditiveBlending,
   AmbientLight, SpotLight, DirectionalLight, TextureLoader
 } from 'three'
+import { RADIUS, MOON_RADIUS } from '@/constants/earth'
 import TEXTURE from '@/constants/texture'
 
 const getTexture = (texture) => {
@@ -22,7 +23,7 @@ export function createCloud () {
 
 export function createEarth () {
   return new Mesh(
-    new SphereGeometry(5, 32, 32),
+    new SphereGeometry(RADIUS, 32, 32),
     new MeshPhongMaterial({
       map: getTexture(TEXTURE.earth),
       bumpMap: getTexture(TEXTURE.earthBump),
@@ -37,7 +38,7 @@ export function createEarth () {
 
 export function createNightEarth () {
   return new Mesh(
-    new SphereGeometry(5, 32, 32),
+    new SphereGeometry(RADIUS, 32, 32),
     new MeshPhongMaterial({
       map: getTexture(TEXTURE.earthNight),
       bumpMap: getTexture(TEXTURE.earthBump),
@@ -52,7 +53,7 @@ export function createNightEarth () {
 
 export function createMoon () {
   return new Mesh(
-    new SphereGeometry(1, 32, 32),
+    new SphereGeometry(MOON_RADIUS, 32, 32),
     new MeshPhongMaterial({
       map: getTexture(TEXTURE.moon),
     })
