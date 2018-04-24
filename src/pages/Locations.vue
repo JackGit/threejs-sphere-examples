@@ -1,7 +1,7 @@
 <template>
   <page>
     <div ref="mountNode"></div>
-    <div class="c-tools">
+    <div class="c-pageTools">
       <select @change="handleSelectChange">
         <option value="">Select a city</option>
         <option v-for="location in locations" :key="location.key" :value="location.key">{{location.name}}</option>
@@ -19,11 +19,13 @@
 import { ArrowHelper, Vector3 } from 'three'
 import Page from '@/components/Page'
 import Container3D from '@/3d/container'
+import Animate from '@/3d/animate'
 import { coordinateToPosition } from '@/3d/utils'
 import { RADIUS, ARROW_HELPER_LENGTH, LOCATIONS } from '@/constants/earth'
 
 export default {
   container3d: null,
+  animate: null,
 
   components: {
     Page
@@ -56,6 +58,7 @@ export default {
 
   mounted () {
     this.container3d = new Container3D(this.$refs.mountNode)
+    this.animate = new Animate(this.container3d)
   },
 
   methods: {
@@ -72,6 +75,8 @@ export default {
     markLocation (lat, lng) {
       const { x, y, z } = coordinateToPosition(lat, lng, RADIUS)
       this.createArrow(new Vector3(x, y, z))
+
+      this.animate.moveCameraToTheTopOfLocation({ x, y, z })
     },
     removeArrow () {
       const { scene } = this.container3d
@@ -94,13 +99,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.c-tools {
-  position: absolute;
-  top: 20px;
-  width: 100%;
-  text-align: center;
-  color: #fff;
-}
-</style>

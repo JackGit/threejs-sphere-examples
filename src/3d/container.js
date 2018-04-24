@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { createAmbientLight, createSpotLight, createEarth, createCloud } from '@/3d/creation'
+import { createAmbientLight, createSpotLight, createEarth, createNightEarth, createCloud } from '@/3d/creation'
 import { PAGE_WIDTH as WIDTH, PAGE_HEIGHT as HEIGHT } from '@/constants/page'
 const OrbitControls = require('three-orbit-controls')(THREE)
 
@@ -15,6 +15,8 @@ export default class Earth {
 
     this.scene = null
     this.earthGroup = null
+    this.earth = null
+    this.nightEarth = null
 
     this.cloud = null
     this.cloudSpeed = -0.0003
@@ -28,6 +30,7 @@ export default class Earth {
     this.createCamera()
     this.createLight()
     this.createEarth()
+    this.createNightEarth()
     this.createCloud()
     this.createController()
     this.loop()
@@ -73,7 +76,15 @@ export default class Earth {
   createEarth () {
     const earth = createEarth()
     earth.name = 'earth'
+    this.earth = earth
     this.earthGroup.add(earth)
+  }
+
+  createNightEarth () {
+    const nightEarth = createNightEarth()
+    nightEarth.name = 'nightEarth'
+    this.nightEarth = nightEarth
+    this.earthGroup.add(nightEarth)
   }
 
   createCloud () {

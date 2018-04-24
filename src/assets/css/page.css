@@ -17,3 +17,11 @@
   margin: -300px 0 0 -187.5px;
   overflow: hidden;
 }
+
+.c-pageTools {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+}
