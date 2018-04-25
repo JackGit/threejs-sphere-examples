@@ -4,6 +4,7 @@ import earthBump from '@/assets/images/earth_bump.jpg'
 import earthSpec from '@/assets/images/earth_spec.jpg'
 import earthCloud from '@/assets/images/earth_cloud.png'
 import space from '@/assets/images/earth_space.png'
+import constellation from '@/assets/images/constellation.jpg'
 import moon from '@/assets/images/moon.jpg'
 
 export default {
@@ -13,5 +14,6 @@ export default {
   earthSpec,
   earthCloud,
   space,
-  moon
+  moon,
+  constellation
 }

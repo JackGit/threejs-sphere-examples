@@ -1,8 +1,10 @@
 import {
-  Mesh, SphereGeometry, MeshPhongMaterial, AdditiveBlending,
-  AmbientLight, SpotLight, DirectionalLight, TextureLoader
+  Mesh, SphereGeometry, AdditiveBlending,
+  MeshPhongMaterial, MeshBasicMaterial,
+  AmbientLight, SpotLight, DirectionalLight, TextureLoader,
+  BackSide
 } from 'three'
-import { RADIUS, MOON_RADIUS } from '@/constants/earth'
+import { RADIUS, MOON_RADIUS, DOME_RADIUS } from '@/constants/earth'
 import TEXTURE from '@/constants/texture'
 
 const getTexture = (texture) => {
@@ -57,6 +59,19 @@ export function createMoon () {
     new MeshPhongMaterial({
       map: getTexture(TEXTURE.moon),
     })
+  )
+}
+
+export function createDome () {
+  // have to use basic material, otherwise will have light effects
+  const material = new MeshBasicMaterial({
+    map: getTexture(TEXTURE.space),
+  })
+  // need set as backside
+  material.side = BackSide
+  return new Mesh(
+    new SphereGeometry(DOME_RADIUS, 32, 32),
+    material
   )
 }
 
