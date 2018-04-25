@@ -1,14 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Index from '@/pages/Index'
 import Locations from '@/pages/Locations'
 import Moon from '@/pages/Moon'
 import Dome from '@/pages/Dome'
 import TextureTransition from '@/pages/TextureTransition'
+import Entering from '@/pages/Entering'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [{
+    path: '/',
+    name: 'Index',
+    component: Index
+  }, {
     path: '/locations',
     name: 'Locations',
     component: Locations
@@ -24,5 +30,9 @@ export default new Router({
     path: '/dome',
     name: 'Dome',
     component: Dome
+  }, {
+    path: '/entering',
+    name: 'Entering',
+    component: Entering
   }]
 })
