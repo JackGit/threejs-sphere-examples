@@ -1,21 +1,24 @@
 <template>
   <page>
-    <div ref="mountNode"></div>
-    <div class="c-pageTools">
-      <select @change="handleSelectChange">
-        <option value="">Select a city</option>
-        <option v-for="location in locations" :key="location.key" :value="location.key">{{location.name}}</option>
-        <option value="any">- your place -</option>
-      </select>
-      <p v-if="selectedLocation">{{selectedLocation.lat}},{{selectedLocation.lng}}</p>
-      <div v-if="selectedLocationKey === 'any'">
-        <input :value="latlng" placeholder="lat,lng" @change="handleInputChange" />
+    <texture-pre-loader @complete="init()">
+      <div ref="mountNode"></div>
+      <div class="c-pageTools">
+        <select @change="handleSelectChange">
+          <option value="">Select a city</option>
+          <option v-for="location in locations" :key="location.key" :value="location.key">{{location.name}}</option>
+          <option value="any">- your place -</option>
+        </select>
+        <p v-if="selectedLocation">{{selectedLocation.lat}},{{selectedLocation.lng}}</p>
+        <div v-if="selectedLocationKey === 'any'">
+          <input :value="latlng" placeholder="lat,lng" @change="handleInputChange" />
+        </div>
       </div>
-    </div>
+    </texture-pre-loader>
   </page>
 </template>
 
 <script>
+import TexturePreLoader from '@/components/TexturePreLoader'
 import { ArrowHelper, Vector3 } from 'three'
 import { coordinateToPosition } from '@/3d/utils'
 import { RADIUS, ARROW_HELPER_LENGTH, LOCATIONS } from '@/constants/earth'
@@ -28,7 +31,8 @@ export default {
   animate: null,
 
   components: {
-    Page
+    Page,
+    TexturePreLoader
   },
 
   data () {
@@ -56,11 +60,10 @@ export default {
     }
   },
 
-  mounted () {
-    this.$options.container3d = new Container3D(this.$refs.mountNode)
-  },
-
   methods: {
+    init () {
+      this.$options.container3d = new Container3D(this.$refs.mountNode)
+    },
     handleSelectChange (e) {
       this.selectedLocationKey = e.target.value
     },

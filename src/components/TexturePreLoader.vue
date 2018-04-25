@@ -3,14 +3,15 @@
     <div v-if="completed">
       <slot></slot>
     </div>
-    <div v-else>
-      {{progress}}
+    <div v-else class="c-progress">
+      loading {{progress}}%
     </div>
   </div>
 </template>
 
 <script>
 import ResourceLoader from 'resource-loader'
+import TEXTURES from '@/constants/texture'
 
 export default {
   props: {
@@ -29,21 +30,26 @@ export default {
 
   created () {
     const loader = new ResourceLoader()
-
-    this.textures.forEach(t => {
-      loader.add(t, t)
-    })
+    ;[
+      ...this.textures, 'earth', 'earthBump', 'earthSpec'
+    ].map(t => TEXTURES[t]).forEach(t => loader.add(t, t))
 
     loader.onProgress.add(() => {
-      this.progress = loader.progress
+      this.progress = Math.round(loader.progress)
     })
 
     loader.onComplete.add(() => {
       this.completed = true
-      this.$emit('complete')
+      this.$nextTick(() => this.$emit('complete'))
     })
 
     loader.load()
   }
 }
 </script>
+
+<style scoped>
+.c-progress {
+  text-align: center;
+}
+</style>

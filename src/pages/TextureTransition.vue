@@ -1,13 +1,16 @@
 <template>
   <page>
-    <div ref="mountNode"></div>
-    <div class="c-pageTools">
-      <button @click="handleClickTransite" :disabled="transitioning">Transite</button>
-    </div>
+    <texture-pre-loader :textures="['earthNight']" @complete="init()">
+      <div ref="mountNode"></div>
+      <div class="c-pageTools">
+        <button @click="handleClickTransite" :disabled="transitioning">Transite</button>
+      </div>
+    </texture-pre-loader>
   </page>
 </template>
 
 <script>
+import TexturePreLoader from '@/components/TexturePreLoader'
 import Page from '@/components/Page'
 import Container3D from '@/3d/container'
 import { createNightEarth } from '@/3d/creation'
@@ -18,7 +21,8 @@ export default {
   nightEarth: null,
 
   components: {
-    Page
+    Page,
+    TexturePreLoader
   },
 
   data () {
@@ -28,18 +32,17 @@ export default {
     }
   },
 
-  mounted () {
-    const container3d = new Container3D(this.$refs.mountNode)
-    const nightEarth = createNightEarth()
-
-    nightEarth.material.opacity = 0
-    container3d.earthGroup.add(nightEarth)
-
-    this.$options.container3d = container3d
-    this.$options.nightEarth = nightEarth
-  },
-
   methods: {
+    init () {
+      const container3d = new Container3D(this.$refs.mountNode)
+      const nightEarth = createNightEarth()
+
+      nightEarth.material.opacity = 0
+      container3d.earthGroup.add(nightEarth)
+
+      this.$options.container3d = container3d
+      this.$options.nightEarth = nightEarth
+    },
     tweenTexture () {
       const { container3d, nightEarth } = this.$options
       let sMaterial, tMaterial

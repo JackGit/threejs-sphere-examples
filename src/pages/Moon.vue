@@ -1,10 +1,13 @@
 <template>
   <page>
-    <div ref="mountNode"></div>
+    <texture-pre-loader :textures="['moon']" @complete="init()">
+      <div ref="mountNode"></div>
+    </texture-pre-loader>
   </page>
 </template>
 
 <script>
+import TexturePreLoader from '@/components/TexturePreLoader'
 import Page from '@/components/Page'
 import Container3D from '@/3d/container'
 import { createMoon } from '@/3d/creation'
@@ -17,33 +20,33 @@ export default {
   moonParent: null,
 
   components: {
-    Page
-  },
-
-  mounted () {
-    const container3d = new Container3D(this.$refs.mountNode)
-    const moon = createMoon()
-    const moonParent = new Object3D()
-
-    this.$options.container3d = container3d
-    this.$options.moon = moon
-    this.$options.moonParent = moonParent
-
-    // move camera a little bit far
-    container3d.camera.position.z = 40
-
-    // add moon
-    moon.position.z = MOON_DISTANCE
-    moonParent.add(moon)
-    container3d.earthGroup.add(moonParent)
-
-    container3d.onUpdate(() => {
-      this.updateRotation()
-      this.updateRevolution()
-    })
+    Page,
+    TexturePreLoader
   },
 
   methods: {
+    init () {
+      const container3d = new Container3D(this.$refs.mountNode)
+      const moon = createMoon()
+      const moonParent = new Object3D()
+
+      this.$options.container3d = container3d
+      this.$options.moon = moon
+      this.$options.moonParent = moonParent
+
+      // move camera a little bit far
+      container3d.camera.position.z = 40
+
+      // add moon
+      moon.position.z = MOON_DISTANCE
+      moonParent.add(moon)
+      container3d.earthGroup.add(moonParent)
+
+      container3d.onUpdate(() => {
+        this.updateRotation()
+        this.updateRevolution()
+      })
+    },
     updateRotation () {
       this.$options.moon.rotation.y += 0.01
     },
